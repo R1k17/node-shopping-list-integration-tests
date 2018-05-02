@@ -13,7 +13,6 @@ const expect = chai.expect;
 // see: https://github.com/chaijs/chai-http
 chai.use(chaiHttp);
 
-
 describe('Shopping List', function() {
 
   // Before our tests run, we activate the server. Our `runServer`
@@ -138,6 +137,91 @@ describe('Shopping List', function() {
           .delete(`/shopping-list/${res.body[0].id}`);
       })
       .then(function(res) {
+        expect(res).to.have.status(204);
+      });
+  });
+});
+
+
+/* 
+ - A GET request to "/recipes"
+ - this test is asynchronous and returns a promise
+ - when the request completes the function in ".then" will run
+ - the test ensures that we have a JSON array of objects and the status code of 200
+ - also "id, name and ingredients" must be checked
+*/
+describe('Recipes', function() {
+  before(function() {
+    return runServer();
+  });
+
+  after(function() {
+    return closeServer();
+  });
+
+  it('should list recipes on GET', function() {
+    return chai.request(app)
+    .get('/recipes')
+    .then(function(res) {
+      expect(res).to.have.status(200);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('array');
+      expect(res.body.length).to.be.at.least(1);
+      const expectedKeys = ['id', 'name', 'ingredients'];
+      res.body.forEach(function(item) {
+        expect(item).to.be.a('object');
+        expect(item).to.include.keys(expectedKeys);
+      });
+    });
+  });
+
+  it('should add a recipe on POST', function() {
+    const newRecipe = {name: 'bread', ingredients: ['stuff', 'more stuff', 'even more stuff']};
+    return chai.request(app)
+    .post('/recipes')
+    .send(newRecipe)
+    .then(function(res) {
+      expect(res).to.have.status(201);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('object');
+      expect(res.body).to.include.keys('id', 'name', 'ingredients');
+      expect(res.body.id).to.not.equal(null);
+      expect(res.body).to.deep.equal(Object.assign(newRecipe, {id: res.body.id}));
+    })
+  })
+
+  it('should update recipe on PUT', function() {
+    const updateData = {
+      name: "name",
+      ingredients: ['pixie', 'dust']
+    };
+    return chai.request(app)
+      .get('/recipes')
+      .then(function(res) {
+        updateData.id = res.body[0].id;
+        return chai.request(app)
+          .put(`/recipes/${updateData.id}`)
+          .send(updateData)
+      })
+    .then(function(res) {
+      // error code 200 or 204? 
+      expect(res).to.have.status(204);
+      expect(res).to.be.json;
+      expect(res.body).to.be.a('object');
+      expect(res.body).to.deep.equal(updateData);
+    });
+  });
+
+  it('should delete recipes on DELETE', function() {
+    return chai.request(app)
+      .get('/recipes')
+      .then(function(res) {
+        return chai.request(app)
+          .delete(`/recipes/${res.body[0].id}`);
+      })
+      .then(function(res) {
+        // DELETE endpoint does not return an object!
+        // only testing the yielding of the 204 status code
         expect(res).to.have.status(204);
       });
   });
