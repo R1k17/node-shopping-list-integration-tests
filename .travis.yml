@@ -1,2 +1,9 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: XvMOL/uBwJgChhugBmKdsi3nlhCdYrPzZdySeboIU+6VlHmOzwo+mBrdvuOfqNxJDPm4clZIBQiOGVsaWPBatdkcuUh/+OZjaSKK842/do+NJiYI4eS8834Qgeul7Sqfsnh+KNipFpIONhMNNB5C0f+suXLHJR7tYgAW7XYxGn2AeoT44hvXLnCcFBKeBhS7aAkVHCSKR+GBpphGu8ZCMg5nub6YZQBMs7afuqMNVNK3wzYeh3PG3gOt4I4q+Mz8sM8BpgzTOjEXYNKBgHbPdp7nohbZNyDOczyJ6hK7h6BS0qDIGYsl3RunXIw+jonX32RXCu7YnTkDi5RWKYbUzgnRzEGVsVzCI5k5pFbRZFUg2+lhSq5sSBMmFKKGVkS+rlEmJ7HH8RmVSAoGBswVFYrG3VjvZTIYlBAJ+mD9u8P60CHfKiicOxIyEWZvme2v2dCh/CF4D4/sY0g5OFw8PdEn4DJ1RD24bx7Cp2NvHMLmTS1nE1EBcOC1U89BnWZA2Fkk6xIAjyn058KvLm03RHbqCakXkZ5Lh7dyBJ/Hdxlem/J9ldirjf9ZW4YW+ZGWsuMul4KKw2SwyarjCowTJW9AwO2rA8jTXLzii4DPYZLW7y9RLtUSKgTjkrerfAqIg0g1pDPyWzt8TZ15hZw2lQNIMsvLbz6p21euOphMz+8=
+  app: tranquil-everglades-14185
+  on:
+    repo: R1k17/node-shopping-list-integration-tests
